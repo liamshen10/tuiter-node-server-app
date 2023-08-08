@@ -2,7 +2,6 @@ import * as usersDao from "./users-dao.js";
 
 
 const AuthController = (app) => {
-  
   const register = (req, res) => {
     const username = req.body.username;
     const user = usersDao.findUserByUsername(username);
@@ -40,34 +39,34 @@ const AuthController = (app) => {
     req.session.destroy();
     res.sendStatus(200);
   };
+
+  
  
-const update = (req, res) => {
-  const userId = req.params.id; // assuming you pass the user ID in the URL
-  const updates = req.body;
+  const update = (req, res) => {
+    const { credentials, user } = req.body;
+    console.log('Received update request with credentials:', credentials, 'and user:', user);
+    const updatedUser = usersDao.updateUser(credentials, user);
+    if (updatedUser) {
+      console.log('Sending updated user:', updatedUser);
+      res.json(updatedUser);
+    } else {
+      console.log('Update failed');
+      res.sendStatus(404);
+    }
+  };
+  
 
-  const user = usersDao.findUserById(userId);
-  if (!user) {
-    res.sendStatus(404); // Not found if the user doesn't exist
-    return;
-  }
 
-  // Check if the current user is allowed to update this profile
-  const currentUser = req.session["currentUser"];
-  if (currentUser.id !== userId) {
-    res.sendStatus(403); // Forbidden if not the current user
-    return;
-  }
-
-  const updatedUser = usersDao.updateUser(userId, updates);
-  res.json(updatedUser);
-};
-
+  
+  
+  app.put("/api/users/update", update);
  app.post("/api/users/register", register);
  app.post("/api/users/login",    login);
  app.post("/api/users/profile",  profile);
  app.post("/api/users/logout",   logout);
- app.put ("/api/users",          update);
- app.get("/api/blah", (req, res) => {
+ app.put ("/api/users/update",   update);
+ //For testing and seeing registered users
+ app.get("/api/testing", (req, res) => {
   const users = usersDao.findAllUsers();
   res.json(users);
 });
