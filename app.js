@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import session from "express-session";
 import express from 'express'
 import "dotenv/config";
@@ -28,7 +29,8 @@ app.use(session(sessionOptions));
 
 
 
-  
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/tuiter'
+mongoose.connect(CONNECTION_STRING);
 app.use(express.json());
 HelloController(app);
 UserController(app);
