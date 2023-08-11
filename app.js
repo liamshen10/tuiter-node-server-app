@@ -10,7 +10,7 @@ import TuitsController from "./controllers/tuits/tuits-controller.js";
 const app = express()
 app.use(cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL_FIX,
+    origin: process.env.FRONTEND_URL,
   })
  );
  const sessionOptions = {
