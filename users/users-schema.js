@@ -4,5 +4,5 @@ const usersSchema = new mongoose.Schema({
   password: { type: String, required: true },
   firstName: String,
   lastName: String,
-}, { collection: "users" });
+}, { collection: "newusers" });
 export default usersSchema;
