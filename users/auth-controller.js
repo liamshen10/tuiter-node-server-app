@@ -48,28 +48,27 @@ const AuthController = (app) =>   {
 
   
  
-  const updateUser = async (req, res) => {
-    const id = req.params._id;
-    console.log("id: " + id);
-    console.log("Request Body: " + req.body);
-    const status = await usersDao.updateUser(id, req.body);
-    console.log(status);
-    const user = await usersDao.findUserById(id);
-    console.log(user);
-    req.session["currentUser"] = user;
-    res.json(status);
+  const update = (req, res) => {
+    const { credentials, user } = req.body;
+    console.log('Received update request with credentials:', credentials, 'and user:', user);
+    const updatedUser = usersDao.updateUser(credentials, user);
+    if (updatedUser) {
+      console.log('Sending updated user:', updatedUser);
+      res.json(updatedUser);
+    } else {
+      console.log('Update failed');
+      res.sendStatus(404);
+    }
   };
   
 
 
   
-  
- app.put("/api/users/:_id", updateUser);
  app.post("/api/users/register", register);
  app.post("/api/users/login",    login);
  app.post("/api/users/profile",  profile);
  app.post("/api/users/logout",   logout);
-
+ app.put ("/api/users/update",   update);
  //For testing and seeing registered users
  app.get("/api/testing", (req, res) => {
   const users = usersDao.findAllUsers();
