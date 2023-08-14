@@ -69,7 +69,7 @@ const AuthController = (app) =>   {
  app.post("/api/users/login",    login);
  app.post("/api/users/profile",  profile);
  app.post("/api/users/logout",   logout);
- app.put ("/api/users/update",   update);
+
  //For testing and seeing registered users
  app.get("/api/testing", (req, res) => {
   const users = usersDao.findAllUsers();
