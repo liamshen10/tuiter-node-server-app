@@ -1,4 +1,5 @@
 import * as usersDao from "./users-dao.js";
+import usersModel from "./users-model.js";
 
 const UserController = (app) => {
    app.get('/api/users', findAllUsers)
@@ -9,14 +10,11 @@ const UserController = (app) => {
 }
 const updateUser = async (req, res) => {
   const id = req.params._id;
-  console.log("id: " + id);
-  console.log("Request Body: " + req.body);
-  const status = await usersDao.updateUser(id, req.body);
-  console.log(status);
+  const result = await usersModel.updateOne({ _id: id }, { $set: user });
+  console.log("Result: " + result);
   const user = await usersDao.findUserById(id);
-  console.log(user);
   req.session["currentUser"] = user;
-  res.json(status);
+  res.json(user);
 };
 
    
