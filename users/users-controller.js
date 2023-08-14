@@ -12,7 +12,7 @@ const updateUser = async (req, res) => {
   console.log("id: " + id);
   const status = await usersDao.updateUser(id, req.body);
   console.log(status);
-  const user = await usersDao.findUserById(id);
+  const user = await usersDao.findUserByUsername(id);
   console.log(user);
   req.session["currentUser"] = user;
   res.json(status);
