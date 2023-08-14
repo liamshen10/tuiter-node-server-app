@@ -2,6 +2,7 @@ import * as usersDao from "./users-dao.js";
 
 
 const AuthController = (app) =>   {
+
   const register = async (req, res) => {
     const user = await usersDao.findUserByUsername(req.body.username);
     if (user) {
@@ -47,24 +48,23 @@ const AuthController = (app) =>   {
 
   
  
-  const update = (req, res) => {
-    const { credentials, user } = req.body;
-    console.log('Received update request with credentials:', credentials, 'and user:', user);
-    const updatedUser = usersDao.updateUser(credentials, user);
-    if (updatedUser) {
-      console.log('Sending updated user:', updatedUser);
-      res.json(updatedUser);
-    } else {
-      console.log('Update failed');
-      res.sendStatus(404);
-    }
+  const updateUser = async (req, res) => {
+    const id = req.params._id;
+    console.log("id: " + id);
+    console.log("Request Body: " + req.body);
+    const status = await usersDao.updateUser(id, req.body);
+    console.log(status);
+    const user = await usersDao.findUserById(id);
+    console.log(user);
+    req.session["currentUser"] = user;
+    res.json(status);
   };
   
 
 
   
   
-  app.put("/api/users/update", update);
+ app.put("/api/users/:_id", updateUser);
  app.post("/api/users/register", register);
  app.post("/api/users/login",    login);
  app.post("/api/users/profile",  profile);
