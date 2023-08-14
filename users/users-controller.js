@@ -8,7 +8,7 @@ const UserController = (app) => {
    app.put('/api/users/:_id', updateUser);
 }
 const updateUser = async (req, res) => {
-  const id = req.params._id;
+  const id = req.params.username;
   console.log("id: " + id);
   const status = await usersDao.updateUser(id, req.body);
   console.log(status);
