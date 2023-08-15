@@ -50,13 +50,10 @@ const AuthController = (app) =>   {
  
   const update = (req, res) => {
     const { credentials, user } = req.body;
-    console.log('Received update request with credentials:', credentials, 'and user:', user);
     const updatedUser = usersDao.updateUser(credentials, user);
     if (updatedUser) {
-      console.log('Sending updated user:', updatedUser);
       res.json(updatedUser);
     } else {
-      console.log('Update failed');
       res.sendStatus(404);
     }
   };
