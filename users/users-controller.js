@@ -5,18 +5,16 @@ const UserController = (app) => {
    app.get('/api/users/:uid', findUserById);
    app.post('/api/users', createUser);
    app.delete('/api/users/:uid', deleteUser);
-   app.put('/api/users/:_id', updateUser);
+   app.put('/api/users/:uid', updateUser);
 }
 const updateUser = async (req, res) => {
-  const id = req.params._id;
-  console.log(id);
+  const id = req.params.id;
   const status = await usersDao.updateUser(id, req.body);
-  console.log(status);
   const user = await usersDao.findUserById(id);
-  console.log(user);
   req.session["currentUser"] = user;
   res.json(status);
 };
+
 
    
    const createUser = async (req, res) => {

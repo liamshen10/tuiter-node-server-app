@@ -49,16 +49,15 @@ const AuthController = (app) =>   {
   
  
   const update = (req, res) => {
-    const { credentials, user } = req.body;
-    console.log('Received update request with credentials:', credentials, 'and user:', user);
-    const updatedUser = usersDao.updateUser(credentials, user);
-    if (updatedUser) {
-      console.log('Sending updated user:', updatedUser);
-      res.json(updatedUser);
-    } else {
-      console.log('Update failed');
+    const currentUser = req.session["currentUser"];
+    if (!currentUser) {
       res.sendStatus(404);
+      return;
     }
+    const updates = req.body;
+    const user = usersDao.updateUser(currentUser._id, updates);
+    req.session["currentUser"] = usersDao.findUserById(currentUser._id);
+    res.json(req.session["currentUser"]);
   };
   
 
@@ -68,7 +67,7 @@ const AuthController = (app) =>   {
  app.post("/api/users/login",    login);
  app.post("/api/users/profile",  profile);
  app.post("/api/users/logout",   logout);
- app.put ("/api/users/update",   update);
+ app.put ("/api/users",          update);
  //For testing and seeing registered users
  app.get("/api/testing", (req, res) => {
   const users = usersDao.findAllUsers();
